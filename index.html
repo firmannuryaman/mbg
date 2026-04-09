@@ -1,0 +1,29 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Riwayat Gizi</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <canvas id="bmiChart" class="mt-10"></canvas>
+  <body>
+    <h1>📊 Sistem Riwayat Gizi</h1>
+
+    <div class="form-container">
+      <h2>Tambah Data</h2>
+        <!-- Tombol reset -->
+        <a href="index.php" class="bg-gray-400 text-white px-4 py-2 rounded">
+          Reset
+        </a>
+      </form>
+      <form action="tambah.php" method="POST">
+        <input type="text" name="nama" placeholder="Nama" required />
+        <input type="date" name="tanggal" required />
+        <input type="number" name="berat" placeholder="Berat" required />
+        <input type="number" name="tinggi" placeholder="Tinggi" required />
+        <button type="submit">Simpan</button>
+      </form>
+    </div>
+
+  </body>
+</html>
