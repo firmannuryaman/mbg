@@ -6,7 +6,7 @@ header("Content-type: text/csv");
 header("Content-Disposition: attachment; filename=riwayat_gizi.csv");
 
 // judul kolom
-echo "Nama,Tanggal,Berat,Tinggi,BMI,Kategori\n";
+echo "NISN,Nama,Tanggal,Berat,Tinggi,BMI,Kategori\n";
 
 // 🔥 QUERY WAJIB ADA
 $data = mysqli_query($conn, "SELECT * FROM riwayat_gizi");
@@ -18,6 +18,6 @@ if (!$data) {
 
 // looping data
 while ($row = mysqli_fetch_assoc($data)) {
-    echo "{$row['nama']},{$row['tanggal']},{$row['berat']},{$row['tinggi']},{$row['bmi']},{$row['kategori']}\n";
+    echo "{$row['nisn']},{$row['nama']},{$row['tanggal']},{$row['berat']},{$row['tinggi']},{$row['bmi']},{$row['kategori']}\n";
 }
 ?>

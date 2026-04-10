@@ -28,44 +28,27 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE `riwayat_gizi` (
-  `id` int NOT NULL,
+  `id` int NOT NULL AUTO_INCREMENT,
+  `nisn` int NOT NULL,
   `nama` varchar(100) DEFAULT NULL,
   `tanggal` date DEFAULT NULL,
   `berat` float DEFAULT NULL,
   `tinggi` float DEFAULT NULL,
   `bmi` float DEFAULT NULL,
-  `kategori` varchar(50) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  `kategori` varchar(50) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data untuk tabel `riwayat_gizi`
 --
 
-INSERT INTO `riwayat_gizi` (`id`, `nama`, `tanggal`, `berat`, `tinggi`, `bmi`, `kategori`) VALUES
-(3, 'Firman', '2026-04-09', 54, 171, 18.47, 'Kurus'),
-(4, 'ilham', '2026-04-09', 54, 169, 18.91, 'Normal'),
-(5, 'aulia', '2026-04-09', 65, 178, 20.52, 'Normal'),
-(6, 'aul', '2026-04-09', 54, 176, 17.43, 'Kurus');
+INSERT INTO `riwayat_gizi` (`nisn`, `nama`, `tanggal`, `berat`, `tinggi`, `bmi`, `kategori`) VALUES
+(2013019, 'Firman', '2007-04-09', 54, 171, 18.47, 'Stunting'),
+(2012632, 'Ilham', '2008-04-09', 54, 169, 18.91, 'Gizi Baik'),
+(2012832, 'Aulia', '2005-04-09', 65, 178, 20.52, 'Gizi Baik'),
+(1237621, 'Aul', '2007-04-09', 54, 176, 17.43, 'Stunting');
 
---
--- Indeks untuk tabel yang dibuang
---
-
---
--- Indeks untuk tabel `riwayat_gizi`
---
-ALTER TABLE `riwayat_gizi`
-  ADD PRIMARY KEY (`id`);
-
---
--- AUTO_INCREMENT untuk tabel yang dibuang
---
-
---
--- AUTO_INCREMENT untuk tabel `riwayat_gizi`
---
-ALTER TABLE `riwayat_gizi`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
