@@ -1,6 +1,11 @@
 <?php
 include 'koneksi.php';
 
+if (!isset($_SESSION['user_id'])) {
+    header('Location: login.php');
+    exit;
+}
+
 // header file
 header("Content-type: text/csv");
 header("Content-Disposition: attachment; filename=riwayat_gizi.csv");

@@ -1,6 +1,11 @@
 <?php
 include 'koneksi.php';
 
+if (!isset($_SESSION['user_id'])) {
+    header('Location: login.php');
+    exit;
+}
+
 $id = $_GET['id'];
 $data = mysqli_query($conn, "SELECT * FROM riwayat_gizi WHERE id=$id");
 $row = mysqli_fetch_assoc($data);

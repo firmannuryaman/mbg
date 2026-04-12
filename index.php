@@ -1,4 +1,11 @@
-<?php include 'koneksi.php'; ?>
+<?php 
+include 'koneksi.php';
+
+if (!isset($_SESSION['user_id'])) {
+    header('Location: login.php');
+    exit;
+}
+?>
 
 <!DOCTYPE html>
 <html lang="id">
@@ -20,76 +27,81 @@
     </script>
     <?php endif; ?>
 
-    <header>
-        <h1>Sistem Riwayat Gizi</h1>
-    </header>
+    <div class="layout">
+        <aside class="sidebar">
+            <h2>Monitoring Gizi</h2>
+            <ul>
+                <li class="active"><a href="index.php">Riwayat Gizi</a></li>
+                <li><a href="users.php">User</a></li>
+            </ul>
+            <div class="sidebar-logout">
+                <a href="logout.php" class="btn btn-danger btn-logout">🚪 Logout</a>
+            </div>
+        </aside>
 
-    <div class="container">
-        <!-- FORM INPUT -->
-        <div class="form-container">
-            <h2>Tambah Data Baru</h2>
-            <form action="tambah.php" method="POST">
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="nisn">NISN</label>
-                        <input type="number" id="nisn" name="nisn" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="nama">Nama</label>
-                        <input type="text" id="nama" name="nama" required>
-                    </div>
+        <main class="main-content">
+            <div class="header">
+                <div>
+                    <h1>Riwayat Gizi</h1>
+                    <small style="color: #999;">User: <strong><?= htmlspecialchars($_SESSION['username']) ?></strong></small>
                 </div>
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="tanggal">Tanggal Lahir</label>
-                        <input type="date" id="tanggal" name="tanggal" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="berat">Berat (kg)</label>
-                        <input type="number" id="berat" name="berat" step="0.1" required>
-                    </div>
+                <div class="header-actions">
+                    <a href="import.php" class="btn btn-secondary btn-sm">📥 Impor Excel</a>
+                    <a href="tambah.php" class="btn btn-primary btn-sm">+ Tambah Data</a>
                 </div>
-                <div class="form-row full">
-                    <div class="form-group">
-                        <label for="tinggi">Tinggi (cm)</label>
-                        <input type="number" id="tinggi" name="tinggi" step="0.1" required>
-                    </div>
-                </div>
-                <button type="submit" class="btn-primary">Simpan Data</button>
-            </form>
-        </div>
+            </div>
+            <?php
+            // Hitung jumlah kategori
+            $qGiziBaik = mysqli_query($conn, "SELECT COUNT(*) as total FROM riwayat_gizi WHERE kategori='Gizi Baik'");
+            $giziBaik = mysqli_fetch_assoc($qGiziBaik)['total'];
 
-        <!-- DATA TABLE -->
-        <div class="table-container">
-            <h2>Data Riwayat Gizi</h2>
-            
-            <!-- Buttons -->
-            <div class="btn-group">
-                <a href="export.php" class="btn btn-success">Ekspor ke Excel</a>
-                <a href="import.php" class="btn btn-info">Impor dari Excel</a>
+            $qStunting = mysqli_query($conn, "SELECT COUNT(*) as total FROM riwayat_gizi WHERE kategori='Stunting'");
+            $stunting = mysqli_fetch_assoc($qStunting)['total'];
+
+            $qObesitas = mysqli_query($conn, "SELECT COUNT(*) as total FROM riwayat_gizi WHERE kategori='Obesitas'");
+            $obesitas = mysqli_fetch_assoc($qObesitas)['total'];
+            ?>
+
+            <div class="stats">
+                <div class="stat-card">
+                    <p>Gizi Baik</p>
+                    <h2><?= $giziBaik ?></h2>
+                </div>
+
+                <div class="stat-card">
+                    <p>Stunting</p>
+                    <h2><?= $stunting ?></h2>
+                </div>
+
+                <div class="stat-card">
+                    <p>Obesitas</p>
+                    <h2><?= $obesitas ?></h2>
+                </div>
             </div>
 
-            <!-- Filter Section -->
-            <form method="GET" class="filter-section">
-                <input type="text" name="cari" value="<?= htmlspecialchars($_GET['cari'] ?? '') ?>" placeholder="Cari nama...">
-                
-                <select name="kategori">
-                    <option value="">Semua Kategori</option>
-                    <option value="Stunting" <?= ($_GET['kategori'] ?? '') === 'Stunting' ? 'selected' : '' ?>>Stunting</option>
-                    <option value="Gizi Baik" <?= ($_GET['kategori'] ?? '') === 'Gizi Baik' ? 'selected' : '' ?>>Gizi Baik</option>
-                    <option value="Obesitas" <?= ($_GET['kategori'] ?? '') === 'Obesitas' ? 'selected' : '' ?>>Obesitas</option>
-                </select>
+            <div class="card">
+                <div class="toolbar">
+                    <a href="export.php" class="btn btn-success btn-sm">Ekspor ke Excel</a>
+                    <form method="GET" class="filter-section">
+                        <input type="text" name="cari" placeholder="Search..." value="<?= htmlspecialchars($_GET['cari'] ?? '') ?>">
 
-                <select name="mode">
-                    <option value="FIFO" <?= ($_GET['mode'] ?? 'FIFO') === 'FIFO' ? 'selected' : '' ?>>FIFO</option>
-                    <option value="LIFO" <?= ($_GET['mode'] ?? 'FIFO') === 'LIFO' ? 'selected' : '' ?>>LIFO</option>
-                </select>
+                        <select name="kategori">
+                            <option value="" <?= ($_GET['kategori'] ?? '') === '' ? 'selected' : '' ?>>Semua</option>
+                            <option value="Stunting" <?= ($_GET['kategori'] ?? '') === 'Stunting' ? 'selected' : '' ?>>Stunting</option>
+                            <option value="Gizi Baik" <?= ($_GET['kategori'] ?? '') === 'Gizi Baik' ? 'selected' : '' ?>>Gizi Baik</option>
+                            <option value="Obesitas" <?= ($_GET['kategori'] ?? '') === 'Obesitas' ? 'selected' : '' ?>>Obesitas</option>
+                        </select>
 
-                <button type="submit" class="btn btn-primary">Cari</button>
-            </form>
+                        <select name="mode">
+                            <option value="FIFO" <?= ($_GET['mode'] ?? 'FIFO') === 'FIFO' ? 'selected' : '' ?>>FIFO</option>
+                            <option value="LIFO" <?= ($_GET['mode'] ?? 'FIFO') === 'LIFO' ? 'selected' : '' ?>>LIFO</option>
+                        </select>
 
-            <!-- Data Table -->
-            <table>
+                        <button type="submit" class="btn btn-secondary btn-sm">Filter</button>
+                    </form>
+                </div>
+
+                <table class="modern-table">
                 <thead>
                     <tr>
                         <th>NISN</th>
@@ -143,8 +155,8 @@
                             <td>{$row['nisn']}</td>
                             <td>{$row['nama']}</td>
                             <td>{$age} tahun</td>
-                            <td>{$row['berat']}</td>
-                            <td>{$row['tinggi']}</td>
+                            <td>{$row['berat']} kg</td>
+                            <td>{$row['tinggi']} cm</td>
                             <td><strong>{$row['bmi']}</strong></td>
                             <td><span class='badge {$badgeClass}'>{$row['kategori']}</span></td>
                             <td>

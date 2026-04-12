@@ -1,6 +1,11 @@
 <?php
 include 'koneksi.php';
 
+if (!isset($_SESSION['user_id'])) {
+    header('Location: login.php');
+    exit;
+}
+
 $id = $_POST['id'];
 $nama = $_POST['nama'];
 $tanggal = $_POST['tanggal'];

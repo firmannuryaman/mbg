@@ -2,6 +2,11 @@
 require 'vendor/autoload.php';
 include 'koneksi.php';
 
+if (!isset($_SESSION['user_id'])) {
+    header('Location: login.php');
+    exit;
+}
+
 use PhpOffice\PhpSpreadsheet\IOFactory;
 
 $message = '';
